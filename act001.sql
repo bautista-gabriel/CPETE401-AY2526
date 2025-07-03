@@ -5,18 +5,21 @@ CREATE TABLE STUDENTS (
 
 
 CREATE TABLE authors(
+  ID INT(10),
   FNAME VARCHAR(100),
   LNAME VARCHAR(100),
-  BIO VARCHAR(100),
+  BIO TEXT,
   DATE_OF_BIRTH DATE
   );
 
 CREATE TABLE publishers(
+  ID INT(10),
   Publisher_Name VARCHAR(100),
   Country VARCHAR(100)
   );
 
 CREATE TABLE books(
+  BOOK_ID INT(20),
   TITLE VARCHAR(100),
   ISBN INT,
   Publication_Date DATE,
@@ -40,7 +43,7 @@ CREATE TABLE doctors(
   Doctor_ID INT (15),
   FNAME VARCHAR (100),
   LNAME VARCHAR (100),
-  Medical_Specialty ENUM('Cardiology', 'Pediatrics', 'Neurology'),
+  Medical_Specialty VARCHAR(100),
   Licensed_Year DATE
   );
 
