@@ -41,7 +41,49 @@ Check your work against the suggested solution provided in the collapsible secti
 <details>
 <summary>Click for Suggested Solution</summary>
 
+```sql
+-- Authors Table
+CREATE TABLE authors (
+    author_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    biography TEXT NULL,
+    date_of_birth DATE NULL,
+    PRIMARY KEY (author_id)
+);
 
+-- Publishers Table
+CREATE TABLE publishers (
+    publisher_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    publisher_name VARCHAR(255) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    PRIMARY KEY (publisher_id),
+    UNIQUE KEY uk_publisher_name (publisher_name)
+);
+
+-- Books Table
+CREATE TABLE books (
+    book_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    isbn VARCHAR(20) NOT NULL,
+    publication_date DATE NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    publisher_id INT UNSIGNED NULL,
+    PRIMARY KEY (book_id),
+    UNIQUE KEY uk_isbn (isbn),
+    CONSTRAINT chk_price CHECK (price > 0),
+    FOREIGN KEY (publisher_id) REFERENCES publishers(publisher_id) ON DELETE SET NULL
+);
+
+-- Book-Authors Linking Table
+CREATE TABLE book_authors (
+    book_id BIGINT UNSIGNED NOT NULL,
+    author_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (book_id, author_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES authors(author_id) ON DELETE CASCADE
+);
+```
 
 </details>
 
@@ -76,6 +118,42 @@ Check your work against the suggested solution provided in the collapsible secti
 <details>
 <summary>Click for Suggested Solution</summary>
 
+```sql
+-- Patients Table
+CREATE TABLE patients (
+    patient_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    phone_number VARCHAR(25) NOT NULL,
+    record_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (patient_id),
+    UNIQUE KEY uk_phone_number (phone_number)
+);
+
+-- Doctors Table
+CREATE TABLE doctors (
+    doctor_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    specialty VARCHAR(100) NOT NULL,
+    license_year YEAR NOT NULL,
+    PRIMARY KEY (doctor_id)
+);
+
+-- Appointments Table
+CREATE TABLE appointments (
+    appointment_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    patient_id BIGINT UNSIGNED NOT NULL,
+    doctor_id INT UNSIGNED NOT NULL,
+    appointment_datetime DATETIME NOT NULL,
+    reason_for_visit VARCHAR(255) NULL,
+    status ENUM('Scheduled', 'Completed', 'Canceled', 'No-Show') DEFAULT 'Scheduled',
+    PRIMARY KEY (appointment_id),
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id) ON DELETE CASCADE
+);
+```
 
 </details>
 
@@ -104,5 +182,29 @@ Check your work against the suggested solution provided in the collapsible secti
 <details>
 <summary>Click for Suggested Solution</summary>
 
+```sql
+-- Departments Table
+CREATE TABLE departments (
+    department_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    department_name VARCHAR(150) NOT NULL,
+    office_location VARCHAR(100) NULL,
+    PRIMARY KEY (department_id),
+    UNIQUE KEY uk_department_name (department_name)
+);
+
+-- Courses Table
+CREATE TABLE courses (
+    course_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    course_code VARCHAR(20) NOT NULL,
+    course_title VARCHAR(255) NOT NULL,
+    credits TINYINT UNSIGNED NOT NULL,
+    department_id INT UNSIGNED NOT NULL,
+    prerequisite_course_id INT UNSIGNED NULL,
+    PRIMARY KEY (course_id),
+    UNIQUE KEY uk_course_code (course_code),
+    FOREIGN KEY (department_id) REFERENCES departments(department_id) ON DELETE CASCADE,
+    FOREIGN KEY (prerequisite_course_id) REFERENCES courses(course_id) ON DELETE SET NULL
+);
+```
 
 </details>
